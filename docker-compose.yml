@@ -1,0 +1,25 @@
+services:
+  mysql:
+    image: mysql:9
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'curr_db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - ./mysql:/var/lib/mysql
+  
+  qdrant:
+    image: qdrant/qdrant:v1.13.4
+    restart: always
+    ports:
+      - 6333:6333
+    expose:
+      - 6333
+    volumes:
+      - ./qdrant:/qdrant
