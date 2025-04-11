@@ -1,7 +1,8 @@
-# Byte-compiled / optimized / DLL files
-mysql_storage/
-qdrant_storage/
+extract/credentials
+data/
 
+
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
