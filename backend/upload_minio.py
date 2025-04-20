@@ -10,6 +10,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 from config.logging_config.modern_log import LoggingConfig
 from config.config import ROOT_DIR, BUCKET_POLICY, FILE_CREDENTIALS
+from config.pydantic_config.pydantic_config import MetadataValidation
 
 load_dotenv()
 
@@ -22,15 +23,18 @@ logger = LoggingConfig(level="INFO", log_file="upload_minio.log").get_logger('dr
 
 def sanitize_filename(filename: str) -> str:
     """Sanitizes a filename by removing whitespace, replacing special characters with
-    underscores, and truncating to a maximum length of 62 characters. If the filename
-    is longer than 62 characters, it will be truncated and a '.pdf' extension will be
+    underscores, and truncating to a maximum length of 62(+filetype) characters. If the filename
+    is longer than 62(+filetype) characters, it will be truncated and a '.pdf' extension will be
     added."""
-    max_length = 62
+    max_length = 58
     filename = re.sub(r'\s+', '', filename)
     filename = re.sub(r'[\\/:"*?<>|]+', '_', filename)
-    if len(filename) > max_length:
-        filename = f"{filename[:max_length]}.pdf"
-    return filename
+    old_filename = filename
+    if len(old_filename) > max_length:
+        new_filename = f"{old_filename[:max_length]}.pdf"
+        logger.warning(f"File name clean from {old_filename} [length {len(old_filename)}] to {new_filename} [length {len(new_filename)}]")
+        return new_filename
+    return old_filename
 
 class DrivetoMinio:
     def __init__(self, bucket_name: str, minio_host: str = "localhost:9000"):
@@ -115,8 +119,10 @@ class DrivetoMinio:
                 "modified_profile": file.get('lastModifyingUser', {}).get('photoLink', ''),
                 "modified_time": file.get('modifiedTime', '')
             }
-            logger.info(f"File name clean: {metadata['file_name']}")
-            self.upload_to_minio(file_id, metadata)
+
+            metadata_validated = MetadataValidation(**metadata)
+
+            self.upload_to_minio(file_id, metadata_validated)
 
         subfolders = self.service.files().list(
             q=f"'{folder_id}' in parents and mimeType='application/vnd.google-apps.folder'",
@@ -173,25 +179,25 @@ class DrivetoMinio:
 
             client.put_object(
                 bucket_name=self.minio_bucket,
-                object_name=metadata['location'],
+                object_name=metadata.location,
                 data=BytesIO(file_bytes),
                 length=len(file_bytes),
                 content_type="application/pdf",
                 metadata= {
-                    "author_name": metadata['author_name'],
-                    "author_email": metadata['author_email'],
-                    "author_profile": metadata['author_profile'],
-                    "uploaded_date": metadata['uploaded_date'],
-                    "created_date": metadata['created_date'],
-                    "size": metadata['size'],
-                    "filetype": metadata['filetype'],
-                    "modified_by_name": metadata['modified_by_name'],
-                    "modified_by_email": metadata['modified_by_email'],
-                    "modified_profile": metadata['modified_profile'],
-                    "modified_time": metadata['modified_time']
+                    "author_name": metadata.author_name,
+                    "author_email": metadata.author_email,
+                    "author_profile": metadata.author_profile,
+                    "uploaded_date": metadata.uploaded_date,
+                    "created_date": metadata.created_date,
+                    "size": metadata.size,
+                    "filetype": metadata.filetype,
+                    "modified_by_name": metadata.modified_by_name,
+                    "modified_by_email": metadata.modified_by_email,
+                    "modified_profile": metadata.modified_profile,
+                    "modified_time": metadata.modified_time
                 }
             )
-            logger.info(f"✅ Uploaded '{metadata['file_name']}' to MinIO.")
+            logger.info(f"✅ Uploaded '{metadata.file_name}' to MinIO.")
         except Exception as e:
             logger.error(f"❌ Error in upload_file_to_minio: {str(e)}")
 

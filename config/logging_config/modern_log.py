@@ -39,7 +39,7 @@ class LoggingConfig:
 
         logger.setLevel(level)
 
-    def get_logger(self, name=__name__):
+    def get_logger(self, name: str = __name__):
         """
         Get a logger instance with the specified name.
 
