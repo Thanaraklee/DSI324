@@ -1,5 +1,5 @@
 [project]
-name = "searchfile"
+name = "DSI324"
 version = "1.0.0"
 
 [tool.setuptools.packages.find]

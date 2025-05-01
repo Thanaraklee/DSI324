@@ -24,6 +24,9 @@ else
   exit 1
 fi
 
+# install the project in editable mode
+pip install -e .
+
 # Upgrade pip and install required packages
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
