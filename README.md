@@ -59,5 +59,3 @@ npm run start
 ```
 # Congrate!
 visit http://localhost:3000 to see it in action.
-
-
