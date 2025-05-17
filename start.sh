@@ -3,7 +3,7 @@
 
 if [ ! -d ".venv" ]; then
     echo "Creating virtual environment..."
-    python -m venv .venv
+    python3 -m venv .venv
 else
     echo "Virtual environment already exists."
 fi
@@ -25,14 +25,14 @@ else
 fi
 
 # install the project in editable mode
-pip install -e .
+pip3 install -e .
 
 # Upgrade pip and install required packages
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+python3 -m pip install --upgrade pip
+python3 -m pip install -r requirements.txt
 
 # Install PyTorch with CUDA 12.6 support
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
 
 # Verify CUDA is available
-python -c "import torch; print(f'CUDA is available: {torch.cuda.is_available()}')"
+python3 -c "import torch; print(f'CUDA is available: {torch.cuda.is_available()}')"
