@@ -31,7 +31,8 @@ def sanitize_filename(filename: str) -> str:
     filename = re.sub(r'[\\/:"*?<>|]+', '_', filename)
     old_filename = filename
     if len(old_filename) > max_length:
-        new_filename = f"{old_filename[:max_length]}.pdf"
+        truncated = old_filename[:max_length].rstrip('.')
+        new_filename = f"{truncated}.pdf"
         logger.warning(f"File name clean from {old_filename} [length {len(old_filename)}] to {new_filename} [length {len(new_filename)}]")
         return new_filename
     return old_filename

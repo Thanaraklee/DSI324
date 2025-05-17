@@ -1,0 +1,4 @@
+# Dockerfile.minio
+FROM minio/minio:latest
+
+COPY ./data/minio_storage /data
