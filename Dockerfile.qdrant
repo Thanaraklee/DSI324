@@ -1,0 +1,4 @@
+# Dockerfile.qdrant
+FROM qdrant/qdrant:v1.13.6
+
+COPY ./data/qdrant_storage /qdrant/storage
