@@ -29,6 +29,7 @@ class LoggingConfig:
         console_handler = RichHandler(level="INFO")
         console_handler.setFormatter(logging.Formatter(FORMAT, DATE_FORMAT))
 
+        os.makedirs("tmp",exist_ok=True)
         file_handler = logging.FileHandler(f"tmp/{log_file}", encoding="utf-8")
         file_handler.setLevel(logging.WARNING)  # ตั้งระดับการบันทึกเป็น WARNING สำหรับไฟล์
         file_handler.setFormatter(logging.Formatter(FORMAT, DATE_FORMAT))
