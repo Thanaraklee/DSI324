@@ -92,6 +92,7 @@ class VectorUploader:
 
         ids_counter = 0
         batch_size = 256
+        # batch_size = 128
 
         total_batches = ceil(len(contents) / batch_size)
         for i, vectors in enumerate(tqdm(self.batch_encode(contents, batch_size), total=total_batches)):
@@ -108,6 +109,8 @@ class VectorUploader:
         logger.info(f"Successfully Uploaded {ids_counter} vectors.")
 
 if __name__ == "__main__":
+    import torch
+    torch.cuda.empty_cache()
     json_path = FILE_EXTRACT
     collection_name = COLLECTION_NAME
     model = SentenceTransformer("BAAI/bge-m3", device="cuda")

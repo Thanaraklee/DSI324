@@ -123,18 +123,19 @@ body {
 /* -------------------------------------------------------------------------- */
 /*Hide Scrollbar*/
 .hidden-scrollbar {
+    /* overflow-y: auto; */
     overflow-y: hidden;
 }
-.hidden-scrollbar > *::-webkit-scrollbar
+/* .hidden-scrollbar > *::-webkit-scrollbar
 {
   width: 0px;
   opacity: 0;
   cursor: pointer;
-}
+} */
 /* Global styles for the list */
 ul {
     padding: 0;
-    padding-bottom: 2rem;
+    padding-bottom: 0rem;
     margin-top: 0.5rem;
     display: flex;
     flex-direction: column;
@@ -143,7 +144,7 @@ ul {
     /* max-height: 100vh; */
     height: 100%;
 }
-  
+
 li {
     height: auto;
     width: 90%;
@@ -382,4 +383,13 @@ li:hover {
     object-fit: cover;
     margin-left: 1rem;
     margin-right: 0.5rem;
+}
+
+
+.faculty-select {
+    margin: 1rem;
+    max-width: 10rem;
+}
+.faculty-select button {
+    width: 10rem;
 }

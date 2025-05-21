@@ -222,7 +222,18 @@ class MinioExtract:
                 })
         logger.info(f"✅ Extracted text from: '{metadata['file_name']}'")
         return content_per_page
+
+    def list_objects(self) -> list:
+        objects = self.minio_client.list_objects(self.bucket_name, recursive=True)
+        locations = []
+        for obj in objects:
+            location = obj.object_name
+            location = location.split("/")[1]
+            if location not in locations:
+                locations.append(location)
+        return locations
     
 if __name__ == "__main__":
     minio_embed = MinioExtract()
     minio_embed.run()
+    # minio_embed.list_objects()
