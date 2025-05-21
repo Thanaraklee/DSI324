@@ -14,8 +14,9 @@ tar -xf Python-3.13.3.tgz
 ## Evaluates and prepares Python
 cd Python-3.13.3
 ./configure --enable-optimizations
+sudo make -j$(nproc)
 sudo make install
-cd $HOME
+cd $HOME/DSI324/
 
 sudo apt-get update -y
 if [ ! -d ".venv" ]; then

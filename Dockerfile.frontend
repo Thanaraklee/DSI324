@@ -1,0 +1,8 @@
+FROM node:22.14.0
+
+WORKDIR /app
+COPY ./frontend /app
+
+RUN npm install --force
+
+CMD ["npm", "start"]
